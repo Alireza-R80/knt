@@ -3,7 +3,7 @@ from django.db import models
 
 class Category(models.Model):
     name = models.CharField(max_length=20)
-    #MPTT
+    # MPTT
 
 
 class BlankProductType(models.Model):
@@ -40,5 +40,6 @@ class BlankProductImage(models.Model):
 
 
 class BlankProductSampleImage(models.Model):
-    blank_product = models.ForeignKey(BlankProduct, related_name='blank_product_sample_images', on_delete=models.CASCADE)
+    blank_product = models.ForeignKey(BlankProduct, related_name='blank_product_sample_images',
+                                      on_delete=models.CASCADE)
     src = models.CharField(max_length=100)
