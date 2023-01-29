@@ -1,5 +1,5 @@
 from django.db import models
-
+from account.models import *
 from blank_product.models import BlankProduct, BlankProductType
 
 
@@ -10,9 +10,8 @@ class Product(models.Model):
     name = models.CharField(max_length=20)
     description = models.TextField()
     blank_product = models.ForeignKey(BlankProduct, on_delete=models.CASCADE, related_name='product')
-    # needs to be modified (Foreign Key: to designer and provider)
-    designer_id = models.IntegerField()
-    provider_id = models.IntegerField()
+    designer = models.ForeignKey('Designer', on_delete=models.SET_NULL, null=True, related_name='products')
+    provider = models.ForeignKey('PrintProvider', on_delete=models.SET_NULL, null=True, related_name='products')
     design_src = models.CharField(max_length=60)
     sample_src = models.CharField(max_length=60)
     discount_percent = models.IntegerField()
@@ -62,8 +61,11 @@ class ProductDetail(models.Model):
 
 class ProductProviderProp(models.Model):
     blank_product = models.ForeignKey(BlankProduct, on_delete=models.CASCADE, related_name='ppp')
-    # needs to be modified
-    provider_id = models.IntegerField()
+    provider = models.ForeignKey(
+        'PrintProvider',
+        on_delete=models.CASCADE,
+        null=True,
+        related_name='product_provider_prop')
     prep_time = models.CharField(max_length=20)
 
 
