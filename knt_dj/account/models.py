@@ -1,16 +1,11 @@
 from django.contrib.auth.base_user import AbstractBaseUser
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, UserManager
 from django.db import models
 
 
-class Customer(AbstractBaseUser):
-    phone_number = models.CharField(max_length=100, unique=True)
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
+class Customer(AbstractUser):
     is_designer = models.BooleanField(default=False)
     modified_at = models.DateTimeField(auto_now_add=True)
-
-    USERNAME_FIELD = 'phone_number'
 
     def __str__(self):
         return f'{self.first_name} - {self.last_name}'
@@ -41,6 +36,7 @@ class PrintProvider(AbstractBaseUser):
     rate = models.IntegerField(default=0)
 
     USERNAME_FIELD = 'phone_number'
+    objects = UserManager()
 
     def __str__(self):
         return f'{self.first_name} - {self.last_name}'
