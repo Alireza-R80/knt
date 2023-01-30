@@ -15,20 +15,20 @@ class Designer(Costumer, models.Model):
 
 
 class Store(models.Model):
-    designer = models.ForeignKey('Designer', on_delete=models.CASCADE, related_name="stores")
+    designer = models.ForeignKey(Designer, on_delete=models.CASCADE, related_name="stores")
     store_name = models.CharField(max_length=100)
     store_avatar = models.CharField(max_length=200)
     num_products = models.IntegerField()
     num_sold = models.IntegerField()
 
 
-class PrintProvider(AbstractUser, models.Model):
+class PrintProvider(Costumer, models.Model):
     rate = models.IntegerField(default=0)
 
 
 class PrintProviderAddress(models.Model):
     print_provider = models.ForeignKey(
-        'PrintProvider',
+        PrintProvider,
         on_delete=models.CASCADE,
         related_name='print_provider_addresses')
     state = models.CharField(max_length=100)
@@ -40,7 +40,7 @@ class PrintProviderAddress(models.Model):
 
 
 class Address(models.Model):
-    user = models.ForeignKey('Costumer', on_delete=models.CASCADE, related_name='addresses')
+    user = models.ForeignKey(Costumer, on_delete=models.CASCADE, related_name='addresses')
     state = models.CharField(max_length=100)
     city = models.CharField(max_length=100)
     detail = models.TextField(max_length=500)
