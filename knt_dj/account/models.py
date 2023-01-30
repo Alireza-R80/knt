@@ -3,15 +3,20 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
-class Customer(AbstractUser, models.Model):
+class Customer(AbstractBaseUser):
+    phone_number = models.CharField(max_length=100, unique=True)
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
     is_designer = models.BooleanField(default=False)
     modified_at = models.DateTimeField(auto_now_add=True)
+
+    USERNAME_FIELD = 'phone_number'
 
     def __str__(self):
         return f'{self.first_name} - {self.last_name}'
 
 
-class Designer(Customer, models.Model):
+class Designer(Customer):
     card_number = models.CharField(max_length=200)
     is_premium = models.BooleanField(default=False)
     balance = models.FloatField()
@@ -29,11 +34,13 @@ class Store(models.Model):
         return f'{self.designer} - {self.store_name}'
 
 
-class PrintProvider(AbstractBaseUser, models.Model):
-    user_name = models.CharField(max_length=100)
+class PrintProvider(AbstractBaseUser):
+    phone_number = models.CharField(max_length=100)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     rate = models.IntegerField(default=0)
+
+    USERNAME_FIELD = 'phone_number'
 
     def __str__(self):
         return f'{self.first_name} - {self.last_name}'
