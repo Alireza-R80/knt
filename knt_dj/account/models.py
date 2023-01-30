@@ -1,13 +1,14 @@
+from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
-class Costumer(AbstractUser, models.Model):
+class Customer(AbstractUser, models.Model):
     is_designer = models.BooleanField(default=False)
     modified_at = models.DateTimeField(auto_now_add=True)
 
 
-class Designer(Costumer, models.Model):
+class Designer(Customer, models.Model):
     card_number = models.CharField(max_length=200)
     is_premium = models.BooleanField(default=False)
     balance = models.FloatField()
@@ -22,7 +23,10 @@ class Store(models.Model):
     num_sold = models.IntegerField()
 
 
-class PrintProvider(Costumer, models.Model):
+class PrintProvider(AbstractBaseUser, models.Model):
+    user_name = models.CharField(max_length=100)
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
     rate = models.IntegerField(default=0)
 
 
@@ -40,7 +44,7 @@ class PrintProviderAddress(models.Model):
 
 
 class Address(models.Model):
-    user = models.ForeignKey(Costumer, on_delete=models.CASCADE, related_name='addresses')
+    user = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='addresses')
     state = models.CharField(max_length=100)
     city = models.CharField(max_length=100)
     detail = models.TextField(max_length=500)
