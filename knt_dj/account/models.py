@@ -31,7 +31,7 @@ class Store(models.Model):
     num_sold = models.IntegerField()
 
     def __str__(self):
-        return f'{self.designer} - {self.store_name}'
+        return self.store_name
 
 
 class PrintProvider(AbstractBaseUser):
