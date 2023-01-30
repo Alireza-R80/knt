@@ -58,6 +58,9 @@ class ProductDetail(models.Model):
     size = models.ForeignKey(Size, on_delete=models.SET_NULL, related_name='product_details', null=True)
     price = models.FloatField()
 
+    def __str__(self):
+        return self.product
+
 
 class ProductProviderProp(models.Model):
     blank_product = models.ForeignKey(BlankProduct, on_delete=models.CASCADE, related_name='ppp')
@@ -68,9 +71,15 @@ class ProductProviderProp(models.Model):
         related_name='product_provider_prop')
     prep_time = models.CharField(max_length=20)
 
+    def __str__(self):
+        return f'{self.blank_product} - {self.provider}'
+
 
 class ProductProviderDetail(models.Model):
     product_provider_prop = models.ForeignKey(ProductProviderProp, on_delete=models.CASCADE, related_name='ppd')
     color = models.ForeignKey(Color, on_delete=models.SET_NULL, related_name='ppd', null=True)
     size = models.ForeignKey(Size, on_delete=models.SET_NULL, related_name='ppd', null=True)
     price = models.FloatField()
+
+    def __str__(self):
+        return self.product_provider_prop
