@@ -22,7 +22,17 @@ class Category(MPTTModel):
 
 class BlankProductType(models.Model):
     name = models.CharField(max_length=20)
-    image = models.CharField(max_length=100)
+    image = models.ImageField(
+        verbose_name='image',
+        upload_to='images/',
+        default='images/default.png'
+    )
+    alt_text = models.CharField(
+        verbose_name='Alternative text',
+        max_length=255,
+        null=True,
+        blank=True,
+    )
 
     def __str__(self):
         return self.name
