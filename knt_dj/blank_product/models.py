@@ -38,7 +38,7 @@ class BlankProductType(models.Model):
         return self.name
 
 
-class BlankProp(models.Model):
+class BlankProductProp(models.Model):
     name = models.CharField(max_length=20)
     type = models.ForeignKey(BlankProductType, related_name='blank_props', on_delete=models.CASCADE)
 
@@ -57,9 +57,9 @@ class BlankProduct(models.Model):
         return self.title
 
 
-class BlankPropValue(models.Model):
+class BlankProductPropValue(models.Model):
     blank_product = models.ForeignKey(BlankProduct, related_name='blank_prop_values', on_delete=models.CASCADE)
-    blank_prop = models.ForeignKey(BlankProp, related_name='blank_prop_values', on_delete=models.CASCADE)
+    blank_prop = models.ForeignKey(BlankProductProp, related_name='blank_prop_values', on_delete=models.CASCADE)
     value = models.CharField(max_length=10)
 
     def __str__(self):
@@ -80,9 +80,9 @@ class BlankProductImage(models.Model):
         blank=True,
     )
     is_preview = models.BooleanField()
-
-    def __str__(self):
-        return self.blank_product
+    #
+    # def __str__(self):
+    #     return self.blank_product
 
 
 class BlankProductSampleImage(models.Model):
@@ -90,6 +90,6 @@ class BlankProductSampleImage(models.Model):
                                       on_delete=models.CASCADE)
     src = models.CharField(max_length=100)
 
-    def __str__(self):
-        return self.blank_product
+    # def __str__(self):
+    #     return self.blank_product
 

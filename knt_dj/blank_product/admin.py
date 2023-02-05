@@ -6,7 +6,7 @@ admin.site.register(Category, MPTTModelAdmin)
 
 
 class BlankPropInline(admin.TabularInline):
-    model = BlankProp
+    model = BlankProductProp
 
 
 @admin.register(BlankProductType)
@@ -25,7 +25,7 @@ class BlankProductSampleImageInline(admin.TabularInline):
 
 
 class BlankPropValueInline(admin.TabularInline):
-    model = BlankPropValue
+    model = BlankProductPropValue
 
 
 @admin.register(BlankProduct)
