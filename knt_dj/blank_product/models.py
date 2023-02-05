@@ -1,9 +1,20 @@
 from django.db import models
+from mptt.models import MPTTModel, TreeForeignKey
+from django.urls import reverse
 
 
-class Category(models.Model):
-    name = models.CharField(max_length=20)
-    # MPTT
+class Category(MPTTModel):
+    name = models.CharField(verbose_name='Category Name', max_length=255, unique=True)
+    slug = models.SlugField(verbose_name='Category safe URL', max_length=255, unique=True)
+    parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
+    is_active = models.BooleanField(default=True)
+
+    class MPTTMeta:
+        order_insertion_by = ['name']
+
+    class Meta:
+        verbose_name = 'Category'
+        verbose_name_plural = 'Categories'
 
     def __str__(self):
         return self.name
@@ -47,7 +58,17 @@ class BlankPropValue(models.Model):
 
 class BlankProductImage(models.Model):
     blank_product = models.ForeignKey(BlankProduct, related_name='blank_product_images', on_delete=models.CASCADE)
-    src = models.CharField(max_length=100)
+    image = models.ImageField(
+        verbose_name='image',
+        upload_to='images/',
+        default='images/default.png'
+    )
+    alt_text = models.CharField(
+        verbose_name='Alternative text',
+        max_length=255,
+        null=True,
+        blank=True,
+    )
     is_preview = models.BooleanField()
 
     def __str__(self):

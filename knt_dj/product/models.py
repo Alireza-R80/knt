@@ -12,8 +12,16 @@ class Product(models.Model):
     blank_product = models.ForeignKey(BlankProduct, on_delete=models.CASCADE, related_name='product')
     designer = models.ForeignKey(Designer, on_delete=models.SET_NULL, null=True, related_name='products')
     provider = models.ForeignKey(PrintProvider, on_delete=models.SET_NULL, null=True, related_name='products')
-    design_src = models.CharField(max_length=60)
-    sample_src = models.CharField(max_length=60)
+    design_img = models.ImageField(
+        verbose_name='image',
+        upload_to='images/',
+        default='images/default.png'
+    )
+    sample_img = models.ImageField(
+        verbose_name='image',
+        upload_to='images/',
+        default='images/default.png'
+    )
     discount_percent = models.IntegerField()
     status = models.CharField(choices=STATUS, max_length=15)
     is_available = models.BooleanField(default=False)
@@ -26,7 +34,17 @@ class Product(models.Model):
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
-    src = models.CharField(max_length=60)
+    image = models.ImageField(
+        verbose_name='image',
+        upload_to='images/',
+        default='images/default.png'
+    )
+    alt_text = models.CharField(
+        verbose_name='Alternative text',
+        max_length=255,
+        null=True,
+        blank=True,
+    )
     is_preview = models.BooleanField(default=False)
 
 

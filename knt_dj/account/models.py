@@ -21,7 +21,17 @@ class Designer(Customer):
 class Store(models.Model):
     designer = models.ForeignKey(Designer, on_delete=models.CASCADE, related_name="stores")
     store_name = models.CharField(max_length=100)
-    store_avatar = models.CharField(max_length=200)
+    store_avatar = models.ImageField(
+        verbose_name='image',
+        upload_to='images/',
+        default='images/default.png'
+    )
+    alt_text = models.CharField(
+        verbose_name='Alternative text',
+        max_length=255,
+        null=True,
+        blank=True,
+    )
     num_products = models.IntegerField()
     num_sold = models.IntegerField()
 
