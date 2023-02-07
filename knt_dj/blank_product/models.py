@@ -1,6 +1,10 @@
 from django.db import models
+from django.db.models import Min
 from mptt.models import MPTTModel, TreeForeignKey
 from django.urls import reverse
+
+# import product
+# from product.models import ProductProviderDetail, ProductProviderProp
 
 
 class Category(MPTTModel):
@@ -56,6 +60,12 @@ class BlankProduct(models.Model):
     def __str__(self):
         return self.title
 
+    # def get_min_price(self):
+    #     min_price = ProductProviderDetail.objects.filter(
+    #         product_provider_prop=product.models.ProductProviderProp.objects.filter(blank_product=self)).aggregate(
+    #         min_price=Min('price'))
+    #     return min_price
+
 
 class BlankProductPropValue(models.Model):
     blank_product = models.ForeignKey(BlankProduct, related_name='blank_prop_values', on_delete=models.CASCADE)
@@ -92,4 +102,3 @@ class BlankProductSampleImage(models.Model):
 
     # def __str__(self):
     #     return self.blank_product
-
