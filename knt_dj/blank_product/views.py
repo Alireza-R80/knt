@@ -1,17 +1,17 @@
 from django.shortcuts import render
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from .serializers import *
 from rest_framework import generics
+from rest_framework.response import Response
 
 
 class BlankProductTypeViewSet(viewsets.ModelViewSet):
     queryset = BlankProductType.objects.all()
     serializer_class = BlankProductTypeSerializer
 
-
-class BlankProductPropViewSet(viewsets.ModelViewSet):
-    queryset = BlankProductProp.objects.all()
-    serializer_class = BlankProductPropSerializer
+    # def retrieve(self, request, *args, **kwargs):
+    #   response = {'You cant get prop separately from blank product'}
+    #  return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
 
 class PropByBlankProductListView(generics.ListAPIView):

@@ -4,7 +4,6 @@ from .views import *
 
 router = routers.DefaultRouter()
 router.register('type', BlankProductTypeViewSet)
-router.register('prop', BlankProductPropViewSet)
 router.register('prop_value', BlankProductPropValueViewSet)
 router.register('image', BlankProductImageViewSet)
 router.register('sample_image', BlankProductSampleImageViewSet)

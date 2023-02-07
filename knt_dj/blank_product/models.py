@@ -44,7 +44,7 @@ class BlankProductType(models.Model):
 
 class BlankProductProp(models.Model):
     name = models.CharField(max_length=20)
-    type = models.ForeignKey(BlankProductType, related_name='blank_props', on_delete=models.CASCADE)
+    type = models.ForeignKey(BlankProductType, related_name='blank_props', on_delete=models.RESTRICT)
 
     def __str__(self):
         return f'{self.name} - {self.type}'
@@ -52,8 +52,8 @@ class BlankProductProp(models.Model):
 
 class BlankProduct(models.Model):
     title = models.CharField(max_length=30)
-    category = models.ForeignKey(Category, related_name='blank_products', on_delete=models.SET_NULL, null=True)
-    type = models.ForeignKey(BlankProductType, related_name='blank_products', on_delete=models.SET_NULL, null=True)
+    category = models.ForeignKey(Category, related_name='blank_products', on_delete=models.RESTRICT, null=True)
+    type = models.ForeignKey(BlankProductType, related_name='blank_products', on_delete=models.RESTRICT, null=True)
     description = models.TextField()
     is_available = models.BooleanField()
 
