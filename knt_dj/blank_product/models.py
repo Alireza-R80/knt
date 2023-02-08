@@ -3,8 +3,11 @@ from django.db.models import Min
 from mptt.models import MPTTModel, TreeForeignKey
 from django.urls import reverse
 
+
 # import product
 # from product.models import ProductProviderDetail, ProductProviderProp
+from account.models import PrintProvider
+from utils.models import Color, Size
 
 
 class Category(MPTTModel):
@@ -62,7 +65,7 @@ class BlankProduct(models.Model):
 
     # def get_min_price(self):
     #     min_price = ProductProviderDetail.objects.filter(
-    #         product_provider_prop=product.models.ProductProviderProp.objects.filter(blank_product=self)).aggregate(
+    #         product_provider_prop=ProductProviderProp.objects.filter(blank_product=self)).aggregate(
     #         min_price=Min('price'))
     #     return min_price
 
@@ -102,3 +105,30 @@ class BlankProductSampleImage(models.Model):
 
     # def __str__(self):
     #     return self.blank_product
+
+
+class ProductProviderProp(models.Model):
+    blank_product = models.ForeignKey(BlankProduct, on_delete=models.CASCADE, related_name='ppp')
+    provider = models.ForeignKey(
+        PrintProvider,
+        on_delete=models.CASCADE,
+        null=True,
+        related_name='product_provider_prop')
+    prep_time = models.CharField(max_length=20)
+
+    def __str__(self):
+        return f'{self.blank_product} - {self.provider}'
+
+    def get_min_price(self):
+        min_price = ProductProviderDetail.objects.filter(product_provider_prop=self).aggregate(min_price=Min('price'))
+        return min_price
+
+
+class ProductProviderDetail(models.Model):
+    product_provider_prop = models.ForeignKey(ProductProviderProp, on_delete=models.CASCADE, related_name='ppd')
+    color = models.ForeignKey(Color, on_delete=models.SET_NULL, related_name='ppd', null=True)
+    size = models.ForeignKey(Size, on_delete=models.SET_NULL, related_name='ppd', null=True)
+    price = models.FloatField()
+
+    def __str__(self):
+        return self.product_provider_prop
