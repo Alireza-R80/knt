@@ -38,18 +38,18 @@ class BaseUser(AbstractUser):
              ('PRP', 'printProvider'),
              ('ADM', 'admin'))
     val = RegexValidator(regex=r'^(09)\d{9}$')
-    phone_number2 = models.CharField(unique=True, validators=[val], max_length=30)
+    phone_number = models.CharField(unique=True, validators=[val], max_length=30)
     username = None
     modified_at = models.DateTimeField(auto_now_add=True)
     role = models.CharField(choices=roles, max_length=30)
 
-    USERNAME_FIELD = 'phone_number2'
+    USERNAME_FIELD = 'phone_number'
     REQUIRED_FIELDS = []
 
     objects = UserManager()
 
     def __str__(self):
-        return self.phone_number2
+        return self.phone_number
 
 
 class Designer(BaseUser):

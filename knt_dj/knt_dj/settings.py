@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'blank_product',
     'order',
     'account',
-    'feedback'
+    'feedback',
+    'jwt'
 ]
 
 AUTH_USER_MODEL = 'account.BaseUser'

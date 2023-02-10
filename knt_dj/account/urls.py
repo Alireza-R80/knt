@@ -1,8 +1,9 @@
 from django.urls import path, include
-from . import views
+from .views import LoginView, RegisterView, LogoutView, UserView
 
 urlpatterns = [
-    # path('login/', views.loginPage),
-    # path('register/', views.registerPage),
-    # path('logout/', views.logoutPage),
+    path('login/', LoginView.as_view()),
+    path('register/', RegisterView.as_view()),
+    path('logout/', LogoutView.as_view()),
+    path('user/', UserView.as_view()),
 ]
