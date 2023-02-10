@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'account',
     'feedback',
     'utils',
+    'jwt'
 ]
 
 AUTH_USER_MODEL = 'account.Customer'
