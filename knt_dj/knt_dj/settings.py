@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'order',
     'account',
     'feedback',
+    'utils',
     'jwt'
 ]
 
