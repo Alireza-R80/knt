@@ -10,9 +10,9 @@ class Order(models.Model):
               ('DLV', 'تحویل داده شده'),
               ('CON', 'تایید شده'),
               ('REJ', 'رد شده'))
-    user = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='orders')
+    user = models.ForeignKey(BaseUser, on_delete=models.CASCADE, related_name='userOrders')
     product = models.ManyToManyField(Product, related_name='orders')
-    provider = models.ForeignKey(PrintProvider, on_delete=models.CASCADE, related_name='orders')
+    provider = models.ForeignKey(PrintProvider, on_delete=models.CASCADE, related_name='providerOrders')
     address = models.CharField(max_length=300)
     status = models.CharField(choices=STATUS, max_length=20)
     created_at = models.DateTimeField(auto_now_add=True)
