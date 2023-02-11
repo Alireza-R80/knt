@@ -1,5 +1,3 @@
-
-
 import jwt
 import datetime
 from rest_framework import status
@@ -10,6 +8,7 @@ import re
 
 from account.models import BaseUser
 from account.serializers import UserSerializer
+
 
 class RegisterView(APIView):
     def post(self, request):
@@ -33,7 +32,7 @@ class RegisterView(APIView):
                 response = {'message': 'password is required'}
                 return Response(response, status=status.HTTP_400_BAD_REQUEST)
             try:
-                user = BaseUser.objects.create_user(phone_number=phone_number,password=password)
+                user = BaseUser.objects.create_user(phone_number=phone_number, password=password)
             except:
                 response = {'message': 'phone number already exists'}
                 return Response(response, status=status.HTTP_400_BAD_REQUEST)

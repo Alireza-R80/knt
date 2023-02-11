@@ -59,7 +59,6 @@ class ProductTag(models.Model):
         return self.name
 
 
-
 # to see if product with color n exists with size m and how much is the price for each combination
 class ProductDetail(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product_details')
@@ -69,6 +68,3 @@ class ProductDetail(models.Model):
 
     def __str__(self):
         return self.product
-
-
-

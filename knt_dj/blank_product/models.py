@@ -2,8 +2,6 @@ from django.db import models
 from django.db.models import Min
 from mptt.models import MPTTModel, TreeForeignKey
 from django.urls import reverse
-
-
 # import product
 # from product.models import ProductProviderDetail, ProductProviderProp
 from account.models import PrintProvider
