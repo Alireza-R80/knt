@@ -47,3 +47,17 @@ class BlankProductSerializer(serializers.ModelSerializer):
         model = BlankProduct
         fields = ('id', 'title', 'category', 'type', 'description', 'is_available', 'blank_product_images',
                   'blank_product_sample_images', 'blank_prop_values')
+
+
+class ProductProviderDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductProviderDetail
+        fields = ('id', 'product_provider_prop', 'color', 'size')
+
+
+class ProductProviderPropSerializer(serializers.ModelSerializer):
+    ppd = ProductProviderDetailSerializer(many=True)
+
+    class Meta:
+        model = ProductProviderProp
+        fields = ('id', 'blank_product', 'provider', 'price', 'prep_time', 'ppd', 'get_min_price')

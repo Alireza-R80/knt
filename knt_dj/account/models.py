@@ -7,7 +7,7 @@ from django.db import models
 
 class UserManager(BaseUserManager):
 
-    def create_user(self, phone_number, is_active=True, is_staff=False, password=None):
+    def create_user(self, phone_number, is_active=True, is_staff=False, password=None, role='CUS'):
         if not password:
             raise ValueError('password is required')
         if not phone_number:
@@ -18,6 +18,7 @@ class UserManager(BaseUserManager):
         user_obj.password = make_password(password)
         user_obj.staff = is_staff
         user_obj.active = is_active
+        user_obj.role = role
         user_obj.save(using=self._db)
         return user_obj
 

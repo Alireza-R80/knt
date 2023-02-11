@@ -4,6 +4,7 @@ from rest_framework import status
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.decorators import api_view
 import re
 
 from account.models import BaseUser, Designer
@@ -78,19 +79,12 @@ class LoginView(APIView):
 class UserView(APIView):
 
     def get(self, request):
-        token = request.COOKIES.get('jwt')
-        if not token:
-            response = {'message': 'user not authenticated'}
-            return Response(response, status=status.HTTP_401_UNAUTHORIZED)
-
-        try:
-            payload = jwt.decode(token, 'secret', algorithms=['HS256'])
-        except jwt.ExpiredSignatureError:
-            response = {'message': 'user not authenticated'}
-            return Response(response, status=status.HTTP_401_UNAUTHORIZED)
-
-        user = BaseUser.objects.filter(id=payload['id']).first()
-        serializer = UserSerializer(user)
+        user = get_user(request)
+        if user.role == 'CUS':
+            serializer = UserSerializer(user)
+        elif user.role == 'DES':
+            designer = Designer.objects.get(parent_user=user)
+            serializer = DesignerSerializer(designer)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -115,8 +109,7 @@ def get_user(request):
     except jwt.ExpiredSignatureError:
         response = {'message': 'user not authenticated'}
         return Response(response, status=status.HTTP_401_UNAUTHORIZED)
-
-    user = BaseUser.objects.filter(id=payload['id']).first()
+    user = BaseUser.objects.get(id=payload['id'])
     return user
 
 
@@ -125,8 +118,9 @@ class PromoteView(APIView):
     def post(self, request):
         card_number = request.data['card_number']
         user = get_user(request=request)
-        user.role = 'DES'
-        user.save()
-        designer = Designer.objects.create(parent_user=user, card_number=card_number)
+        customer = BaseUser.objects.get(phone_number=user.data['phone_number'])
+        customer.role = 'DES'
+        customer.save()
+        designer = Designer.objects.create(parent_user=customer, card_number=card_number)
         serializer = DesignerSerializer(designer)
         return Response(serializer.data, status=status.HTTP_200_OK)

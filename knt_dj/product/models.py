@@ -13,7 +13,7 @@ class Product(models.Model):
     name = models.CharField(max_length=20)
     description = models.TextField()
     blank_product = models.ForeignKey(BlankProduct, on_delete=models.CASCADE, related_name='product')
-    designer = models.ForeignKey(Designer, on_delete=models.SET_NULL, null=True, related_name='products')
+    designer = models.ForeignKey(Designer, on_delete=models.SET_NULL, null=True, related_name='designer_products')
     provider = models.ForeignKey(PrintProvider, on_delete=models.SET_NULL, null=True, related_name='products')
     design_img = models.ImageField(
         verbose_name='image',
@@ -25,11 +25,13 @@ class Product(models.Model):
         upload_to='images/',
         default='images/default.png'
     )
+    price = models.FloatField()
     discount_percent = models.IntegerField()
-    status = models.CharField(choices=STATUS, max_length=15)
+    status = models.CharField(choices=STATUS, max_length=15, default='طراحی شده')
     is_available = models.BooleanField(default=False)
     rate = models.FloatField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
@@ -59,13 +61,11 @@ class ProductTag(models.Model):
         return self.name
 
 
-
 # to see if product with color n exists with size m and how much is the price for each combination
 class ProductDetail(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product_details')
-    color = models.ForeignKey(Color, on_delete=models.SET_NULL, related_name='product_details', null=True)
-    size = models.ForeignKey(Size, on_delete=models.SET_NULL, related_name='product_details', null=True)
-    price = models.FloatField()
+    color = models.ForeignKey(Color, on_delete=models.CASCADE, related_name='product_details', null=True)
+    size = models.ForeignKey(Size, on_delete=models.CASCADE, related_name='product_details', null=True)
 
     def __str__(self):
         return self.product

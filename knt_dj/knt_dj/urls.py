@@ -6,7 +6,8 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/blank_product/', include('blank_product.urls')),
-    path('account/', include('account.urls')),
+    path('api/v1/account/', include('account.urls')),
+    path('api/v1/product/', include('product.urls'))
 ]
 
 if settings.DEBUG:

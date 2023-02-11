@@ -2,27 +2,46 @@ from rest_framework import serializers
 from product.models import *
 
 
-class ColorSerializers(serializers.ModelSerializer):
-    class Meta:
-        model = Color
-        fields = ('id', 'name', 'code')
-
-
-class SizeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Size
-        fields = ('id', 'type', 'unit')
-
-
-class ProductProviderDetailSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ProductProviderDetail
-        fields = ('id', 'product_provider_prop', 'color', 'size', 'price')
-
-
-class ProductProviderPropSerializer(serializers.ModelSerializer):
-    ppd = ProductProviderDetailSerializer(many=True)
+class ProductImageSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = ProductProviderProp
-        fields = ('id', 'blank_product', 'provider', 'prep_time', 'ppd', 'get_min_price')
+        model = ProductImage
+        fields = (
+            'id', 'product', 'image', 'alt_text', 'is_preview'
+        )
+
+
+class ProductTagSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ProductTag
+        fields = (
+            'id', 'product', 'name'
+        )
+
+
+class ProductDetailSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ProductDetail
+        fields = (
+            'id', 'product', 'color', 'size'
+        )
+
+
+class ProductSerializer(serializers.ModelSerializer):
+    images = ProductImageSerializer(many=True)
+    tags = ProductTagSerializer(many=True)
+    product_details = ProductDetailSerializer(many=True)
+
+    class Meta:
+        model = BlankProduct
+        read_only_fields = (
+            'designer',
+            'created_at',
+            'modified_at',
+            'status',
+            'is_available'
+        ),
+        fields = ('id', 'name', 'description', 'blank_product', 'provider', 'design_img', 'sample_img', 'price',
+                  'discount_percent', 'rate', 'images', 'tags', 'product_detail')

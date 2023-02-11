@@ -10,7 +10,6 @@ class Color(models.Model):
 
 
 class Size(models.Model):
-    # type = models.ForeignKey('blank_product.BlankProductType', on_delete=models.CASCADE, related_name='sizes')
     unit = models.CharField(max_length=10)
 
 
