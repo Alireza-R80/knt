@@ -1,5 +1,3 @@
-
-
 import jwt
 import datetime
 from rest_framework import status
@@ -8,8 +6,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 import re
 
-from account.models import BaseUser
-from account.serializers import UserSerializer
+from account.models import BaseUser, Designer
+from account.serializers import UserSerializer, DesignerSerializer
+
 
 class RegisterView(APIView):
     def post(self, request):
@@ -33,7 +32,7 @@ class RegisterView(APIView):
                 response = {'message': 'password is required'}
                 return Response(response, status=status.HTTP_400_BAD_REQUEST)
             try:
-                user = BaseUser.objects.create_user(phone_number=phone_number,password=password)
+                user = BaseUser.objects.create_user(phone_number=phone_number, password=password)
             except:
                 response = {'message': 'phone number already exists'}
                 return Response(response, status=status.HTTP_400_BAD_REQUEST)
@@ -103,3 +102,31 @@ class LogoutView(APIView):
             'message': 'logged out successfully'
         }
         return response
+
+
+def get_user(request):
+    token = request.COOKIES.get('jwt')
+    if not token:
+        response = {'message': 'user not authenticated'}
+        return Response(response, status=status.HTTP_401_UNAUTHORIZED)
+
+    try:
+        payload = jwt.decode(token, 'secret', algorithms=['HS256'])
+    except jwt.ExpiredSignatureError:
+        response = {'message': 'user not authenticated'}
+        return Response(response, status=status.HTTP_401_UNAUTHORIZED)
+
+    user = BaseUser.objects.filter(id=payload['id']).first()
+    return user
+
+
+class PromoteView(APIView):
+
+    def post(self, request):
+        card_number = request.data['card_number']
+        user = get_user(request=request)
+        user.role = 'DES'
+        user.save()
+        designer = Designer.objects.create(parent_user=user, card_number=card_number)
+        serializer = DesignerSerializer(designer)
+        return Response(serializer.data, status=status.HTTP_200_OK)

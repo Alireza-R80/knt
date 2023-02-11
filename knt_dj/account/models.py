@@ -40,7 +40,7 @@ class BaseUser(AbstractUser):
     val = RegexValidator(regex=r'^(09)\d{9}$')
     phone_number = models.CharField(unique=True, validators=[val], max_length=30)
     username = None
-    modified_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now_add=True, null=True)
     role = models.CharField(choices=roles, max_length=30)
 
     USERNAME_FIELD = 'phone_number'
@@ -52,11 +52,12 @@ class BaseUser(AbstractUser):
         return self.phone_number
 
 
-class Designer(BaseUser):
+class Designer(models.Model):
+    parent_user = models.OneToOneField(BaseUser, related_name='designer', on_delete=models.CASCADE)
     card_number = models.CharField(max_length=200)
     is_premium = models.BooleanField(default=False)
-    balance = models.FloatField()
-    upgraded_at = models.DateTimeField(auto_now_add=True)
+    balance = models.FloatField(default=0)
+    upgraded_at = models.DateTimeField(auto_now_add=True, null=True)
 
 
 class Store(models.Model):
