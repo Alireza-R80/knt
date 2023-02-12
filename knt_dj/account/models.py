@@ -22,6 +22,17 @@ class UserManager(BaseUserManager):
         user_obj.save(using=self._db)
         return user_obj
 
+    def create_print_provider(self, phone_number, password=None):
+        provider = self.create_user(
+            phone_number=phone_number,
+            password=password,
+        )
+        provider.role = 'PRP'
+        provider.is_superuser = False
+        provider.is_staff = False
+        provider.save(using=self._db)
+        return provider
+
     def create_superuser(self, phone_number, password=None, ):
         user = self.create_user(
             phone_number=phone_number,
@@ -33,7 +44,7 @@ class UserManager(BaseUserManager):
         return user
 
 
-class Customer(AbstractUser):
+class BaseUser(AbstractUser):
     roles = (('CUS', 'customer'),
              ('DES', 'designer'),
              ('PRP', 'printProvider'),
@@ -59,7 +70,7 @@ class Customer(AbstractUser):
 
 
 class Designer(models.Model):
-    parent_user = models.OneToOneField(Customer, related_name='designer', on_delete=models.CASCADE)
+    parent_user = models.OneToOneField(BaseUser, related_name='designer', on_delete=models.CASCADE)
     card_number = models.CharField(max_length=200)
     is_premium = models.BooleanField(default=False)
     balance = models.FloatField(default=0)
@@ -87,10 +98,10 @@ class Store(models.Model):
         return self.store_name
 
 
-class PrintProvider(AbstractUser):
-    val = RegexValidator(regex=r'^(09)\d{9}$')
-    phone_number = models.CharField(max_length=11, unique=True, validators=[val])
-    full_name = models.CharField(max_length=50)
+class PrintProvider(models.Model):
+    parent_user = models.OneToOneField(BaseUser, related_name='print_provider', on_delete=models.CASCADE)
+    name = models.CharField(max_length=50)
+    description = models.TextField()
     rate = models.IntegerField(default=0)
     role = models.CharField(default='PRP', max_length=10)
 
@@ -99,7 +110,7 @@ class PrintProvider(AbstractUser):
     objects = UserManager()
 
     def __str__(self):
-        return self.phone_number
+        return self.name
 
     class Meta:
         verbose_name = 'Print Provider'
@@ -124,7 +135,7 @@ class PrintProviderAddress(models.Model):
 
 
 class Address(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='addresses')
+    customer = models.ForeignKey(BaseUser, on_delete=models.CASCADE, related_name='addresses')
     state = models.ForeignKey(State, related_name='address', on_delete=models.RESTRICT)
     city = models.ForeignKey(City, related_name='address', on_delete=models.RESTRICT)
     detail = models.TextField(max_length=500)
@@ -133,4 +144,4 @@ class Address(models.Model):
     is_default = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{self.user} - {self.state}'
+        return f'{self.customer} - {self.state}'

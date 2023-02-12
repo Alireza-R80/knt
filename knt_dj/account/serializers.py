@@ -1,11 +1,11 @@
 from rest_framework import serializers
 
-from account.models import Customer, Designer, PrintProviderAddress, PrintProvider
+from account.models import BaseUser, Designer, PrintProviderAddress, PrintProvider
 
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Customer
+        model = BaseUser
         read_only_fields = (
             'role', 'is_active'
         ),

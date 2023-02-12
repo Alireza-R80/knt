@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     'jwt'
 ]
 
-AUTH_USER_MODEL = 'account.Customer'
+AUTH_USER_MODEL = 'account.BaseUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -134,3 +134,4 @@ MEDIA_ROOT = BASE_DIR / 'media/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
