@@ -7,4 +7,4 @@ class EmployerAdmin(admin.ModelAdmin):
     list_display = ('parent_user', 'card_number')
 
 
-admin.site.register(BaseUser)
+admin.site.register(Customer)

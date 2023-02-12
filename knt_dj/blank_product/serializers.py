@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from blank_product.models import *
 from utils.serializers import SizeSerializer, ColorSerializers
+from account.serializers import PrintProviderSerializer
 
 
 class CategorySerializers(serializers.ModelSerializer):
@@ -61,6 +62,7 @@ class ProductProviderDetailSerializer(serializers.ModelSerializer):
 
 class ProductProviderPropSerializer(serializers.ModelSerializer):
     ppd = ProductProviderDetailSerializer(many=True)
+    provider = PrintProviderSerializer(read_only=True)
 
     class Meta:
         model = ProductProviderProp

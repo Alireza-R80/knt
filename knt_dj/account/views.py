@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 import re
 
-from account.models import BaseUser, Designer
+from account.models import Customer, Designer
 from account.serializers import UserSerializer, DesignerSerializer
 
 
@@ -33,7 +33,7 @@ class RegisterView(APIView):
                 response = {'message': 'password is required'}
                 return Response(response, status=status.HTTP_400_BAD_REQUEST)
             try:
-                user = BaseUser.objects.create_user(phone_number=phone_number, password=password)
+                user = Customer.objects.create_user(phone_number=phone_number, password=password)
             except:
                 response = {'message': 'phone number already exists'}
                 return Response(response, status=status.HTTP_400_BAD_REQUEST)
@@ -47,7 +47,7 @@ class LoginView(APIView):
         phone_number_pattern = re.compile(r'^(09)\d{9}$')
         phone_number = request.data['phone_number']
         password = request.data['password']
-        user = BaseUser.objects.filter(phone_number=phone_number).first()
+        user = Customer.objects.filter(phone_number=phone_number).first()
 
         if not phone_number_pattern.match(phone_number):
             response = {'message': 'phone number is invalid'}
@@ -109,7 +109,7 @@ def get_user(request):
     except jwt.ExpiredSignatureError:
         response = {'message': 'user not authenticated'}
         return Response(response, status=status.HTTP_401_UNAUTHORIZED)
-    user = BaseUser.objects.get(id=payload['id'])
+    user = Customer.objects.get(id=payload['id'])
     return user
 
 
@@ -118,7 +118,7 @@ class PromoteView(APIView):
     def post(self, request):
         card_number = request.data['card_number']
         user = get_user(request=request)
-        customer = BaseUser.objects.get(phone_number=user.data['phone_number'])
+        customer = Customer.objects.get(phone_number=user.data['phone_number'])
         customer.role = 'DES'
         customer.save()
         designer = Designer.objects.create(parent_user=customer, card_number=card_number)

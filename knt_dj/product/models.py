@@ -1,8 +1,6 @@
-from django.db import models
-from django.db.models.aggregates import Min
 
 from account.models import *
-from blank_product.models import BlankProduct, BlankProductType
+from blank_product.models import BlankProduct
 from utils.models import Color, Size
 
 

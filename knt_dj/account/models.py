@@ -3,11 +3,12 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
 from django.db import models
+from utils.models import *
 
 
 class UserManager(BaseUserManager):
 
-    def create_user(self, phone_number, is_active=True, is_staff=False, password=None, role='CUS'):
+    def create_user(self, phone_number, is_active=True, is_staff=False, password=None):
         if not password:
             raise ValueError('password is required')
         if not phone_number:
@@ -18,7 +19,6 @@ class UserManager(BaseUserManager):
         user_obj.password = make_password(password)
         user_obj.staff = is_staff
         user_obj.active = is_active
-        user_obj.role = role
         user_obj.save(using=self._db)
         return user_obj
 
@@ -33,7 +33,7 @@ class UserManager(BaseUserManager):
         return user
 
 
-class BaseUser(AbstractUser):
+class Customer(AbstractUser):
     roles = (('CUS', 'customer'),
              ('DES', 'designer'),
              ('PRP', 'printProvider'),
@@ -42,7 +42,7 @@ class BaseUser(AbstractUser):
     phone_number = models.CharField(unique=True, validators=[val], max_length=30)
     username = None
     modified_at = models.DateTimeField(auto_now_add=True, null=True)
-    role = models.CharField(choices=roles, max_length=30)
+    role = models.CharField(choices=roles, max_length=30, default='CUS')
 
     USERNAME_FIELD = 'phone_number'
     REQUIRED_FIELDS = []
@@ -52,9 +52,14 @@ class BaseUser(AbstractUser):
     def __str__(self):
         return self.phone_number
 
+    class Meta:
+        verbose_name = 'Customer'
+        verbose_name_plural = 'Customers'
+        db_table = 'customer'
+
 
 class Designer(models.Model):
-    parent_user = models.OneToOneField(BaseUser, related_name='designer', on_delete=models.CASCADE)
+    parent_user = models.OneToOneField(Customer, related_name='designer', on_delete=models.CASCADE)
     card_number = models.CharField(max_length=200)
     is_premium = models.BooleanField(default=False)
     balance = models.FloatField(default=0)
@@ -82,11 +87,24 @@ class Store(models.Model):
         return self.store_name
 
 
-class PrintProvider(BaseUser):
+class PrintProvider(AbstractUser):
+    val = RegexValidator(regex=r'^(09)\d{9}$')
+    phone_number = models.CharField(max_length=11, unique=True, validators=[val])
+    full_name = models.CharField(max_length=50)
     rate = models.IntegerField(default=0)
+    role = models.CharField(default='PRP', max_length=10)
+
+    USERNAME_FIELD = 'phone_number'
+    REQUIRED_FIELDS = []
+    objects = UserManager()
 
     def __str__(self):
         return self.phone_number
+
+    class Meta:
+        verbose_name = 'Print Provider'
+        verbose_name_plural = 'Print Providers'
+        db_table = 'print_provider'
 
 
 class PrintProviderAddress(models.Model):
@@ -94,8 +112,8 @@ class PrintProviderAddress(models.Model):
         PrintProvider,
         on_delete=models.CASCADE,
         related_name='print_provider_addresses')
-    state = models.CharField(max_length=100)
-    city = models.CharField(max_length=100)
+    state = models.ForeignKey(State, related_name='print_provider_address', on_delete=models.RESTRICT)
+    city = models.ForeignKey(City, related_name='print_provider_address', on_delete=models.RESTRICT)
     detail = models.TextField(max_length=500)
     post_code = models.IntegerField()
     phone_number = models.CharField(max_length=200)
@@ -106,9 +124,9 @@ class PrintProviderAddress(models.Model):
 
 
 class Address(models.Model):
-    user = models.ForeignKey(BaseUser, on_delete=models.CASCADE, related_name='addresses')
-    state = models.CharField(max_length=100)
-    city = models.CharField(max_length=100)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='addresses')
+    state = models.ForeignKey(State, related_name='address', on_delete=models.RESTRICT)
+    city = models.ForeignKey(City, related_name='address', on_delete=models.RESTRICT)
     detail = models.TextField(max_length=500)
     post_code = models.IntegerField()
     phone_number = models.CharField(max_length=200)

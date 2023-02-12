@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     'jwt'
 ]
 
-AUTH_USER_MODEL = 'account.BaseUser'
+AUTH_USER_MODEL = 'account.Customer'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

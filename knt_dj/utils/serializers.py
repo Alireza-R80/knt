@@ -14,3 +14,17 @@ class SizeSerializer(serializers.ModelSerializer):
         fields = ('id', 'unit')
 
 
+class StateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = State
+        fields = (
+            'id', 'name',
+        )
+
+
+class CitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = State
+        fields = (
+            'id', 'state', 'name',
+        )
