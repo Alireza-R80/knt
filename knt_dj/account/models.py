@@ -33,12 +33,13 @@ class UserManager(BaseUserManager):
         provider.save(using=self._db)
         return provider
 
-    def create_superuser(self, phone_number, password=None, ):
+    def create_superuser(self, phone_number, password=None):
         user = self.create_user(
             phone_number=phone_number,
             password=password,
         )
         user.is_staff = True
+        user.role = 'ADM'
         user.is_superuser = True
         user.save(using=self._db)
         return user

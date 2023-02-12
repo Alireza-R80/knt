@@ -12,6 +12,9 @@ class Color(models.Model):
 class Size(models.Model):
     unit = models.CharField(max_length=10)
 
+    def __str__(self):
+        return self.unit
+
 
 class State(models.Model):
     name = models.CharField(max_length=30)

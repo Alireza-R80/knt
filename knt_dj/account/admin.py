@@ -8,3 +8,6 @@ class EmployerAdmin(admin.ModelAdmin):
 
 
 admin.site.register(BaseUser)
+admin.site.register(PrintProvider)
+admin.site.register(PrintProviderAddress)
+admin.site.register(Address)

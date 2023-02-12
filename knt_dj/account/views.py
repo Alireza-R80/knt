@@ -117,8 +117,7 @@ class PromoteView(APIView):
 
     def post(self, request):
         card_number = request.data['card_number']
-        user = get_user(request=request)
-        customer = BaseUser.objects.get(phone_number=user.data['phone_number'])
+        customer = get_user(request=request)
         customer.role = 'DES'
         customer.save()
         designer = Designer.objects.create(parent_user=customer, card_number=card_number)
