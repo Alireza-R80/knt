@@ -120,10 +120,6 @@ class ProductProviderProp(models.Model):
     def __str__(self):
         return f'{self.blank_product} - {self.provider}'
 
-    def get_min_price(self):
-        min_price = ProductProviderDetail.objects.filter(product_provider_prop=self).aggregate(min_price=Min('price'))
-        return min_price
-
 
 class ProductProviderDetail(models.Model):
     product_provider_prop = models.ForeignKey(ProductProviderProp, on_delete=models.CASCADE, related_name='ppd')

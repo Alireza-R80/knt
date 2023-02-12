@@ -14,7 +14,7 @@ class Product(models.Model):
     description = models.TextField()
     blank_product = models.ForeignKey(BlankProduct, on_delete=models.CASCADE, related_name='product')
     designer = models.ForeignKey(Designer, on_delete=models.SET_NULL, null=True, related_name='designer_products')
-    provider = models.ForeignKey(PrintProvider, on_delete=models.SET_NULL, null=True, related_name='products')
+    provider = models.ForeignKey(PrintProvider, on_delete=models.SET_NULL, null=True, blank=True, related_name='products')
     design_img = models.ImageField(
         verbose_name='image',
         upload_to='images/',
@@ -67,8 +67,8 @@ class ProductDetail(models.Model):
     color = models.ForeignKey(Color, on_delete=models.CASCADE, related_name='product_details', null=True)
     size = models.ForeignKey(Size, on_delete=models.CASCADE, related_name='product_details', null=True)
 
-    def __str__(self):
-        return self.product
+    # def __str__(self):
+    #     return self.product
 
 
 

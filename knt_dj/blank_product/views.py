@@ -34,6 +34,13 @@ class BlankProductByCategoryListView(generics.ListAPIView):
             category__in=Category.objects.get(slug=self.kwargs['slug']).get_descendants(include_self=True))
 
 
+class BlankProductByTypeListView(generics.ListAPIView):
+    serializer_class = BlankProductSerializer
+
+    def get_queryset(self):
+        return BlankProduct.objects.filter(type__id=self.kwargs['typeID'])
+
+
 class AvailableBlankProductListView(generics.ListAPIView):
     serializer_class = BlankProductSerializer
 
@@ -46,13 +53,6 @@ class BlankProductPropValueViewSet(viewsets.ModelViewSet):
     serializer_class = BlankProductPropValueSerializer
 
 
-class PropValueByBlankProductListView(generics.ListAPIView):
-    serializer_class = BlankProductPropValueSerializer
-
-    def get_queryset(self):
-        return BlankProductPropValue.objects.filter(blank_product__id=self.kwargs['bpid'])
-
-
 class BlankProductImageViewSet(viewsets.ModelViewSet):
     queryset = BlankProductImage.objects.all()
     serializer_class = BlankProductImageSerializer
@@ -61,5 +61,20 @@ class BlankProductImageViewSet(viewsets.ModelViewSet):
 class BlankProductSampleImageViewSet(viewsets.ModelViewSet):
     queryset = BlankProductSampleImage.objects.all()
     serializer_class = BlankProductSampleImageSerializer
+
+
+class ProductProvidersPropViewSet(generics.ListAPIView):
+    serializer_class = ProductProviderPropSerializer
+
+    def get_queryset(self):
+        return ProductProviderProp.objects.filter(blank_product__id=self.kwargs['bpiID'])
+
+
+class ProductProviderPropViewSet(generics.RetrieveAPIView):
+    serializer_class = ProductProviderPropSerializer
+
+    def get_queryset(self):
+        provider_id = self.request.data['providerID']
+        return ProductProviderProp.objects.get(blank_product__id=self.kwargs['bpiID'], provider__id=provider_id)
 
 # Create your views here.

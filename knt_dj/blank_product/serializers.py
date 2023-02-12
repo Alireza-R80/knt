@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from blank_product.models import *
+from utils.serializers import SizeSerializer, ColorSerializers
 
 
 class CategorySerializers(serializers.ModelSerializer):
@@ -50,6 +51,9 @@ class BlankProductSerializer(serializers.ModelSerializer):
 
 
 class ProductProviderDetailSerializer(serializers.ModelSerializer):
+    color = ColorSerializers(read_only=True)
+    size = SizeSerializer(read_only=True)
+
     class Meta:
         model = ProductProviderDetail
         fields = ('id', 'product_provider_prop', 'color', 'size')
@@ -60,4 +64,4 @@ class ProductProviderPropSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProductProviderProp
-        fields = ('id', 'blank_product', 'provider', 'price', 'prep_time', 'ppd', 'get_min_price')
+        fields = ('id', 'blank_product', 'provider', 'price', 'prep_time', 'ppd')

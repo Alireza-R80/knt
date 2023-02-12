@@ -35,7 +35,7 @@ class ProductSerializer(serializers.ModelSerializer):
     product_details = ProductDetailSerializer(many=True)
 
     class Meta:
-        model = BlankProduct
+        model = Product
         read_only_fields = (
             'designer',
             'created_at',
@@ -44,4 +44,4 @@ class ProductSerializer(serializers.ModelSerializer):
             'is_available'
         ),
         fields = ('id', 'name', 'description', 'blank_product', 'provider', 'design_img', 'sample_img', 'price',
-                  'discount_percent', 'rate', 'images', 'tags', 'product_detail')
+                  'discount_percent', 'rate', 'images', 'tags', 'product_details')
