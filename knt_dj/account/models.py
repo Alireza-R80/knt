@@ -103,19 +103,9 @@ class PrintProvider(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField()
     rate = models.IntegerField(default=0)
-    role = models.CharField(default='PRP', max_length=10)
-
-    USERNAME_FIELD = 'phone_number'
-    REQUIRED_FIELDS = []
-    objects = UserManager()
 
     def __str__(self):
         return self.name
-
-    class Meta:
-        verbose_name = 'Print Provider'
-        verbose_name_plural = 'Print Providers'
-        db_table = 'print_provider'
 
 
 class PrintProviderAddress(models.Model):

@@ -33,15 +33,13 @@ class PrintProviderAddressSerializer(serializers.ModelSerializer):
 
 class PrintProviderSerializer(serializers.ModelSerializer):
     print_provider_addresses = PrintProviderAddressSerializer(many=False)
+    parent_user = UserSerializer(read_only=True)
 
     class Meta:
         model = PrintProvider
         read_only_fields = (
-            'role', 'is_active', 'rate'
+            'rate'
         ),
         fields = (
-            'id', 'phone_number', 'full_name', 'password', 'print_provider_addresses', 'role', 'is_active', 'rate'
+            'id', 'parent_user', 'name', 'description', 'rate', 'print_provider_addresses',
         )
-        extra_kwargs = {
-            'password': {'write_only': True}
-        }
