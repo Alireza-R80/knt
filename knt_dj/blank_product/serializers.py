@@ -37,7 +37,7 @@ class BlankProductPropSerializer(serializers.ModelSerializer):
 class BlankProductPropMiniSerializer(serializers.ModelSerializer):
     class Meta:
         model = BlankProductProp
-        fields = 'name'
+        fields = ('id', 'name')
 
 
 class BlankProductImageSerializer(serializers.ModelSerializer):
