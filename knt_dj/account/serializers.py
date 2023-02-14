@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from account.models import BaseUser, Designer, PrintProviderAddress, PrintProvider
+from utils.serializers import StateSerializer
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -32,9 +33,11 @@ class PrintProviderAddressSerializer(serializers.ModelSerializer):
 
 
 class PrintProviderAddressMiniSerializer(serializers.ModelSerializer):
+    state = StateSerializer(read_only=True)
+
     class Meta:
         model = PrintProviderAddress
-        fields = 'state'
+        fields = ('id', 'state')
 
 
 class PrintProviderSerializer(serializers.ModelSerializer):

@@ -9,7 +9,7 @@ from blank_product.models import ProductProviderProp, ProductProviderDetail
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = (GetOnly,)
+    # permission_classes = (GetOnly,)
 
     def perform_create(self, serializer):
         colors = self.request.data.get('colors', False)
