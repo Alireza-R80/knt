@@ -8,7 +8,7 @@ from .serializers import *
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = (GetOnly,)
+    # permission_classes = (GetOnly,)
 
     def perform_create(self, serializer):
         serializer.save(designer=self.request.user)

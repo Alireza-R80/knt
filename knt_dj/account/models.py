@@ -65,9 +65,9 @@ class BaseUser(AbstractUser):
         return self.phone_number
 
     class Meta:
-        verbose_name = 'Customer'
-        verbose_name_plural = 'Customers'
-        db_table = 'customer'
+        verbose_name = 'BaseUser'
+        verbose_name_plural = 'BaseUsers'
+        db_table = 'baseUser'
 
 
 class Designer(models.Model):

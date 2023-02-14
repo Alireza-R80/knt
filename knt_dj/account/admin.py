@@ -3,7 +3,7 @@ from .models import *
 
 
 @admin.register(Designer)
-class EmployerAdmin(admin.ModelAdmin):
+class DesignerAdmin(admin.ModelAdmin):
     list_display = ('parent_user', 'card_number')
 
 

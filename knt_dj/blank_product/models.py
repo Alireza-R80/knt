@@ -1,8 +1,7 @@
 from django.db import models
-from django.db.models import Min
+from django.db.models import Min, Avg
 from mptt.models import MPTTModel, TreeForeignKey
 from django.urls import reverse
-
 
 # import product
 # from product.models import ProductProviderDetail, ProductProviderProp
@@ -69,6 +68,10 @@ class BlankProduct(models.Model):
     #         min_price=Min('price'))
     #     return min_price
 
+    def get_avg_price(self):
+        avg_price = ProductProviderProp.objects.filter(blank_product=self).aggregate(avg_price=Avg('price'))
+        return avg_price
+
 
 class BlankProductPropValue(models.Model):
     blank_product = models.ForeignKey(BlankProduct, related_name='blank_prop_values', on_delete=models.CASCADE)
@@ -101,7 +104,7 @@ class BlankProductImage(models.Model):
 class BlankProductSampleImage(models.Model):
     blank_product = models.ForeignKey(BlankProduct, related_name='blank_product_sample_images',
                                       on_delete=models.CASCADE)
-    src = models.CharField(max_length=100)
+    sample_file = models.FileField(upload_to='images/')
 
     # def __str__(self):
     #     return self.blank_product
@@ -118,13 +121,10 @@ class ProductProviderProp(models.Model):
     prep_time = models.CharField(max_length=20)
 
     def __str__(self):
-        return f'{self.blank_product} - {self.provider}'
+        return f'{self.blank_product.title} - {self.provider.name}'
 
 
 class ProductProviderDetail(models.Model):
     product_provider_prop = models.ForeignKey(ProductProviderProp, on_delete=models.CASCADE, related_name='ppd')
     color = models.ForeignKey(Color, on_delete=models.SET_NULL, related_name='ppd', null=True)
     size = models.ForeignKey(Size, on_delete=models.SET_NULL, related_name='ppd', null=True)
-
-    def __str__(self):
-        return self.product_provider_prop

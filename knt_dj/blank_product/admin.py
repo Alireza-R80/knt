@@ -9,6 +9,17 @@ class BlankPropInline(admin.TabularInline):
     model = BlankProductProp
 
 
+class ProductProviderDetailInLine(admin.TabularInline):
+    model = ProductProviderDetail
+
+
+@admin.register(ProductProviderProp)
+class ProductProviderPropAdmin(admin.ModelAdmin):
+    inlines = [
+        ProductProviderDetailInLine
+    ]
+
+
 @admin.register(BlankProductType)
 class BlankProductTypeAdmin(admin.ModelAdmin):
     inlines = [

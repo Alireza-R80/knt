@@ -31,7 +31,7 @@ class BlankProductImageSerializer(serializers.ModelSerializer):
 class BlankProductSampleImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = BlankProductSampleImage
-        fields = ('id', 'blank_product', 'src')
+        fields = ('id', 'blank_product', 'sample_file')
 
 
 class BlankProductPropValueSerializer(serializers.ModelSerializer):
@@ -48,7 +48,7 @@ class BlankProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = BlankProduct
         fields = ('id', 'title', 'category', 'type', 'description', 'is_available', 'blank_product_images',
-                  'blank_product_sample_images', 'blank_prop_values')
+                  'blank_product_sample_images', 'blank_prop_values', 'get_avg_price')
 
 
 class ProductProviderDetailSerializer(serializers.ModelSerializer):
@@ -62,6 +62,7 @@ class ProductProviderDetailSerializer(serializers.ModelSerializer):
 
 class ProductProviderPropSerializer(serializers.ModelSerializer):
     ppd = ProductProviderDetailSerializer(many=True)
+    blank_product = BlankProductSerializer(read_only=True)
     provider = PrintProviderSerializer(read_only=True)
 
     class Meta:

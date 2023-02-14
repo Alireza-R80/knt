@@ -32,7 +32,7 @@ class PrintProviderAddressSerializer(serializers.ModelSerializer):
 
 
 class PrintProviderSerializer(serializers.ModelSerializer):
-    print_provider_addresses = PrintProviderAddressSerializer(many=False)
+    print_provider_addresses = PrintProviderAddressSerializer(many=True)
     parent_user = UserSerializer(read_only=True)
 
     class Meta:
