@@ -110,10 +110,10 @@ class PrintProvider(models.Model):
 
 
 class PrintProviderAddress(models.Model):
-    print_provider = models.ForeignKey(
+    print_provider = models.OneToOneField(
         PrintProvider,
         on_delete=models.CASCADE,
-        related_name='print_provider_addresses')
+        related_name='print_provider_address')
     state = models.ForeignKey(State, related_name='print_provider_address', on_delete=models.RESTRICT)
     city = models.ForeignKey(City, related_name='print_provider_address', on_delete=models.RESTRICT)
     detail = models.TextField(max_length=500)

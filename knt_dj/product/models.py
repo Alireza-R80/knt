@@ -24,7 +24,7 @@ class Product(models.Model):
         default='images/default.png'
     )
     price = models.FloatField()
-    discount_percent = models.IntegerField()
+    discount_percent = models.IntegerField(default=0)
     status = models.CharField(choices=STATUS, max_length=15, default='طراحی شده')
     is_available = models.BooleanField(default=False)
     rate = models.FloatField(default=0)
@@ -63,7 +63,7 @@ class ProductTag(models.Model):
 class ProductDetail(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product_details')
     color = models.ForeignKey(Color, on_delete=models.CASCADE, related_name='product_details', null=True)
-    size = models.ForeignKey(Size, on_delete=models.CASCADE, related_name='product_details', null=True)
+    size = models.ManyToManyField(Size, related_name='product_details')
 
     # def __str__(self):
     #     return self.product

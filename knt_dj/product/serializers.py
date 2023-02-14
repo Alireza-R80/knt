@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from product.models import *
+from utils.serializers import ColorSerializer, SizeSerializer
 
 
 class ProductImageSerializer(serializers.ModelSerializer):
@@ -21,6 +22,8 @@ class ProductTagSerializer(serializers.ModelSerializer):
 
 
 class ProductDetailSerializer(serializers.ModelSerializer):
+    color = ColorSerializer(read_only=True)
+    size = SizeSerializer(many=True)
 
     class Meta:
         model = ProductDetail

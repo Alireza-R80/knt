@@ -2,7 +2,7 @@ from rest_framework import serializers
 from .models import *
 
 
-class ColorSerializers(serializers.ModelSerializer):
+class ColorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Color
         fields = ('id', 'name', 'code')

@@ -31,8 +31,14 @@ class PrintProviderAddressSerializer(serializers.ModelSerializer):
         )
 
 
+class PrintProviderAddressMiniSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PrintProviderAddress
+        fields = 'state'
+
+
 class PrintProviderSerializer(serializers.ModelSerializer):
-    print_provider_addresses = PrintProviderAddressSerializer(many=True)
+    print_provider_address = PrintProviderAddressSerializer(many=False)
     parent_user = UserSerializer(read_only=True)
 
     class Meta:
@@ -41,5 +47,18 @@ class PrintProviderSerializer(serializers.ModelSerializer):
             'rate'
         ),
         fields = (
-            'id', 'parent_user', 'name', 'description', 'rate', 'print_provider_addresses',
+            'id', 'parent_user', 'name', 'description', 'rate', 'print_provider_address',
+        )
+
+
+class PrintProviderMiniSerializer(serializers.ModelSerializer):
+    print_provider_address = PrintProviderAddressMiniSerializer(many=False)
+
+    class Meta:
+        model = PrintProvider
+        read_only_fields = (
+            'rate'
+        ),
+        fields = (
+            'id', 'name', 'rate', 'print_provider_address',
         )

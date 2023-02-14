@@ -10,7 +10,7 @@ from rest_framework.response import Response
 class BlankProductTypeViewSet(viewsets.ModelViewSet):
     queryset = BlankProductType.objects.all()
     serializer_class = BlankProductTypeSerializer
-    # permission_classes = (DesignerGetOnly,)
+    permission_classes = (DesignerGetOnly,)
     # def retrieve(self, request, *args, **kwargs):
     #   response = {'You cant get prop separately from blank product'}
     #  return Response(response, status=status.HTTP_400_BAD_REQUEST)
@@ -18,8 +18,7 @@ class BlankProductTypeViewSet(viewsets.ModelViewSet):
 
 class PropByBlankProductListView(generics.ListAPIView):
     serializer_class = BlankProductPropSerializer
-
-    # permission_classes = (DesignerGetOnly,)
+    permission_classes = (DesignerGetOnly,)
 
     def get_queryset(self):
         return BlankProductProp.objects.filter(blank_product__id=self.kwargs['bpID'])
@@ -28,13 +27,12 @@ class PropByBlankProductListView(generics.ListAPIView):
 class BlankProductViewSet(viewsets.ModelViewSet):
     queryset = BlankProduct.objects.all()
     serializer_class = BlankProductSerializer
-    # permission_classes = (DesignerGetOnly,)
+    permission_classes = (DesignerGetOnly,)
 
 
 class BlankProductByCategoryListView(generics.ListAPIView):
     serializer_class = BlankProductSerializer
-
-    # permission_classes = (DesignerGetOnly,)
+    permission_classes = (DesignerGetOnly,)
 
     def get_queryset(self):
         return BlankProduct.objects.filter(
@@ -44,7 +42,7 @@ class BlankProductByCategoryListView(generics.ListAPIView):
 class BlankProductByTypeListView(generics.ListAPIView):
     serializer_class = BlankProductSerializer
 
-    # permission_classes = (DesignerGetOnly,)
+    permission_classes = (DesignerGetOnly,)
 
     def get_queryset(self):
         return BlankProduct.objects.filter(type__id=self.kwargs['typeID'], is_available=True)
@@ -53,7 +51,7 @@ class BlankProductByTypeListView(generics.ListAPIView):
 class AvailableBlankProductListView(generics.ListAPIView):
     serializer_class = BlankProductSerializer
 
-    # permission_classes = (DesignerGetOnly,)
+    permission_classes = (DesignerGetOnly,)
 
     def get_queryset(self):
         return BlankProduct.objects.filter(is_available=True)
@@ -62,25 +60,24 @@ class AvailableBlankProductListView(generics.ListAPIView):
 class BlankProductPropValueViewSet(viewsets.ModelViewSet):
     queryset = BlankProductPropValue.objects.all()
     serializer_class = BlankProductPropValueSerializer
-    # permission_classes = (DesignerGetOnly,)
+    permission_classes = (DesignerGetOnly,)
 
 
 class BlankProductImageViewSet(viewsets.ModelViewSet):
     queryset = BlankProductImage.objects.all()
     serializer_class = BlankProductImageSerializer
-    # permission_classes = (DesignerGetOnly,)
+    permission_classes = (DesignerGetOnly,)
 
 
 class BlankProductSampleImageViewSet(viewsets.ModelViewSet):
     queryset = BlankProductSampleImage.objects.all()
     serializer_class = BlankProductSampleImageSerializer
-    # permission_classes = (DesignerGetOnly,)
+    permission_classes = (DesignerGetOnly,)
 
 
 class ProductProvidersPropViewSet(generics.ListAPIView):
     serializer_class = ProductProviderPropSerializer
-
-    # permission_classes = (DesignerGetOnly,)
+    permission_classes = (DesignerGetOnly,)
 
     def get_queryset(self):
         return ProductProviderProp.objects.prefetch_related('provider__print_provider_addresses').filter(
@@ -89,8 +86,7 @@ class ProductProvidersPropViewSet(generics.ListAPIView):
 
 class ProductProviderPropViewSet(generics.RetrieveAPIView):
     serializer_class = ProductProviderPropSerializer
-
-    # permission_classes = (DesignerGetOnly,)
+    permission_classes = (DesignerGetOnly,)
 
     def get_queryset(self):
         provider_id = self.request.data['providerID']
